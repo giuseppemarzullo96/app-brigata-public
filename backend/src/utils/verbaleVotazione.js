@@ -21,7 +21,7 @@ const { applicaCartaIntestata } = require('./cartaIntestata');
  */
 
 const DENOMINAZIONE = 'La Brigata – Unità di strada ODV';
-const SEDE_LEGALE = 'via Dionisio Martino, 6 – Salerno';
+const SEDE_LEGALE = process.env.SEDE_LEGALE || 'indirizzo della sede legale';
 const FUSO = 'Europe/Rome';
 const VUOTO = '____________________';
 
@@ -255,7 +255,7 @@ function generaVerbalePdf({ votazione, esito, dati, registro = [], presenze, all
   }[d.approvazione_voto_app] || `L'Assemblea approva ${VUOTO}.`;
   paragrafo(
     '2. Modalità di votazione. Il Presidente propone che l\'elezione si svolga a scrutinio segreto tramite ' +
-    'l\'applicazione gestionale dell\'associazione (app.labrigataodv.it), accessibile a ciascun socio con ' +
+    'l\'applicazione gestionale dell\'associazione (' + (process.env.APP_URL || 'app web') + '), accessibile a ciascun socio con ' +
     'credenziali personali. Il sistema registra la partecipazione al voto separatamente dal contenuto della ' +
     'scheda, così che non sia possibile risalire al voto espresso da ciascuno, e non consente di esprimere ' +
     `voti nulli. Ogni socio può esprimere fino a ${votazione.preferenze_max} preferenze; risultano eletti ` +

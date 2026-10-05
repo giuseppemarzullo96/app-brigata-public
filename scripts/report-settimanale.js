@@ -11,7 +11,7 @@
  *   node report-settimanale.js            invia il report su WhatsApp
  *   node report-settimanale.js --prova    lo stampa soltanto, senza inviare
  */
-const { Client } = require('/var/app-brigata/backend/node_modules/pg');
+const { Client } = require(require('path').join(__dirname, '../backend/node_modules/pg'));
 const { execFileSync } = require('child_process');
 
 const SOLO_PROVA = process.argv.includes('--prova');
@@ -192,7 +192,7 @@ function componi(m) {
     r.push('');
   }
 
-  r.push('👉 https://app.labrigataodv.it');
+  r.push('👉 ' + (process.env.APP_URL || 'https://tuo-dominio.example'));
   return r.join('\n');
 }
 
