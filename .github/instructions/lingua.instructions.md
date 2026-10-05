@@ -1,0 +1,4 @@
+---
+applyTo: '**'
+---
+parla in italiano

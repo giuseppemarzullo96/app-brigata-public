@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo-labrigata.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>La Brigata ODV - Sistema Gestionale</title>
+    <script>
+      // Protezione contro errori da script esterni (estensioni browser, etc.)
+      window.addEventListener('error', function(e) {
+        // Ignora errori da script esterni che non sono nostri
+        if (e.filename && !e.filename.includes(window.location.origin) && !e.filename.includes('main.tsx')) {
+          e.preventDefault();
+          return true;
+        }
+      }, true);
+    </script>
+    <!--
+      Statistiche d'uso (Umami), ospitate sul nostro server: senza cookie,
+      quindi senza banner di consenso, e nessun dato esce dal server.
+      auto-track disattivato: le pagine vengono registrate dall'app con gli
+      identificativi mascherati, per non finire a scrivere negli indirizzi
+      l'id del socio che sta guardando il proprio profilo.
+      data-domains limita la raccolta al dominio di produzione: in sviluppo
+      non viene inviato nulla.
+    -->
+    <script
+      defer
+      src="https://analytics.giuseppemarzullo.it/script.js"
+      data-website-id="1e408a81-aa9c-4405-8bbb-ebab086e7dd1"
+      data-domains="app.labrigataodv.it"
+      data-auto-track="false"
+    ></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

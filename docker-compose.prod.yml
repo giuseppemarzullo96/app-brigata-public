@@ -1,0 +1,46 @@
+# Stesso pattern usato per content-ai/n8n/evolution su questo server: container Docker
+# con reverse proxy Plesk davanti. Backend esposto SOLO su localhost (127.0.0.1).
+services:
+  backend:
+    build: ./backend
+    container_name: app-brigata-backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3020:3000"
+    env_file:
+      - .env
+    volumes:
+      - app_brigata_uploads:/app/uploads
+      # Certificati Apple Wallet e service account Google Wallet (fuori da git).
+      - ./wallet:/app/wallet:ro
+    depends_on:
+      - postgres
+    networks:
+      - app-brigata
+      - evolution_default
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: app-brigata-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app_brigata
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: app_brigata
+    volumes:
+      - app_brigata_pgdata:/var/lib/postgresql/data
+    networks:
+      - app-brigata
+
+networks:
+  app-brigata:
+    driver: bridge
+  evolution_default:
+    external: true
+    name: evolution_evolution_default
+
+# Volumi nominati: NON vengono mai ricreati da un `docker compose up`/`build` normale.
+# Vanno toccati solo con un comando esplicito e volontario (`docker compose down -v`).
+volumes:
+  app_brigata_pgdata:
+  app_brigata_uploads:

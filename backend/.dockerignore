@@ -1,0 +1,17 @@
+# Cosa NON va nell'immagine del backend.
+#
+# logs/: i log dei test girati sull'host finivano nel container di
+# produzione, mescolati a quelli veri; e se un test stava scrivendo durante
+# il build, il file cresceva mentre Docker lo impacchettava e il build si
+# fermava ("write too long").
+logs/
+# node_modules/: il Dockerfile installa le sole dipendenze di produzione;
+# senza questa riga COPY . . ci ricopiava sopra quelle dell'host, sviluppo
+# compreso.
+node_modules/
+tests/
+coverage/
+uploads/
+.env
+.env.*
+*.log

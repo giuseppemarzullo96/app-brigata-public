@@ -1,0 +1,61 @@
+workflows:
+  android-workflow:
+    name: Android Debug Build
+    max_build_duration: 60
+    instance_type: linux
+    environment:
+      node: 22
+      java: 21
+      vars:
+        PROJECT_DIR: frontend
+    scripts:
+      - name: Install dependencies
+        script: |
+          cd $PROJECT_DIR
+          npm ci
+      - name: Build web app (Capacitor mode)
+        script: |
+          cd $PROJECT_DIR
+          npm run build:capacitor
+      - name: Sync Capacitor Android
+        script: |
+          cd $PROJECT_DIR
+          npx cap sync android
+      - name: Build debug APK
+        script: |
+          cd $PROJECT_DIR/android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+    artifacts:
+      - frontend/android/app/build/outputs/apk/debug/*.apk
+
+  ios-workflow:
+    name: iOS Simulator Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      node: 22
+      xcode: latest
+      vars:
+        PROJECT_DIR: frontend
+    scripts:
+      - name: Install dependencies
+        script: |
+          cd $PROJECT_DIR
+          npm ci
+      - name: Build web app (Capacitor mode)
+        script: |
+          cd $PROJECT_DIR
+          npm run build:capacitor
+      - name: Sync Capacitor iOS
+        script: |
+          cd $PROJECT_DIR
+          npx cap sync ios
+      - name: Build for simulator (no signing required)
+        script: |
+          cd $PROJECT_DIR/ios/App
+          xcodebuild -project App.xcodeproj -scheme App \
+            -configuration Debug -sdk iphonesimulator \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+    artifacts:
+      - frontend/ios/App/build/Build/Products/**/*.app

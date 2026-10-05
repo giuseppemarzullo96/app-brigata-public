@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Quanto spazio occupa in fondo la barra di navigazione del telefono:
+     serve a chi deve stare sopra di lei (l'azione principale, la pagina). */
+  :root {
+    --altezza-barra-basso: calc(4rem + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --altezza-barra-basso: 0px;
+    }
+  }
+
+  html, body {
+    @apply bg-gray-50 text-gray-900;
+    overflow-x: hidden;
+  }
+
+  /* Archivo per i titoli, Source Sans 3 (il sans di base) per il resto. */
+  h1, h2, h3 {
+    @apply font-display;
+    letter-spacing: -0.015em;
+  }
+}
+
+@layer components {
+  /* Almeno 44px d'altezza: sotto quella misura un dito sbaglia. Gli angoli
+     e il peso sono quelli della proposta; disabilitato si vede e non reagisce. */
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold transition-colors;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* Il pulsante normale è inchiostro; il giallo è riservato all'azione
+     principale della pagina (.btn-azione). */
+  .btn-primary {
+    @apply bg-gray-900 text-white hover:bg-gray-800;
+  }
+
+  .btn-azione {
+    @apply bg-giallo text-gray-900 hover:bg-giallo-scuro;
+  }
+  
+  .btn-secondary {
+    @apply border border-gray-300 bg-white text-gray-900 hover:bg-gray-100;
+  }
+  
+  .btn-danger {
+    @apply bg-red-700 text-white hover:bg-red-800;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  /* Dentro la WebView nativa di Capacitor, WebKit impone il proprio rendering di
+     sistema ai controlli date/time ignorando gli stili (compresa la larghezza, che
+     causava l'overflow orizzontale). appearance:none disattiva il controllo nativo
+     e restituisce il controllo del box model al CSS. */
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"] {
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    background-color: #fff;
+    min-height: 42px;
+  }
+
+  /* Il campo resta vuoto senza questo: WebKit centra verticalmente il testo del
+     controllo nativo in modo diverso una volta rimossa la sua UI. */
+  input[type="date"]::-webkit-date-and-time-value,
+  input[type="time"]::-webkit-date-and-time-value,
+  input[type="datetime-local"]::-webkit-date-and-time-value {
+    text-align: left;
+  }
+  
+  /* `capitalize` di Tailwind mette la maiuscola a OGNI parola: "55 Porzioni",
+     "24 Settembre". In italiano i mesi e i nomi comuni sono minuscoli, quindi
+     serve una classe che tocchi solo la prima lettera della frase. */
+  .iniziale-maiuscola::first-letter {
+    text-transform: uppercase;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-gray-200 shadow-sm p-4 sm:p-6;
+  }
+  
+  /* Ottimizzazioni mobile per tabelle */
+  .table-responsive {
+    @apply overflow-x-auto -mx-4 sm:mx-0;
+  }
+  
+  .table-responsive table {
+    @apply min-w-full;
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    @apply whitespace-nowrap px-2 sm:px-4;
+  }
+}
+
